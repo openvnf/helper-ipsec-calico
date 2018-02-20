@@ -38,23 +38,23 @@ echo "IPSEC service is ${IPSEC_SERVICE}"
 for i in 1 2 3 4 5
 do
     sleep 10
+    set +e
+    serviceip=`_lookupserviceendpoing ${IPSEC_NAMESPACE} ${IPSEC_SERVICE}`
+    if [ $? -eq 2 ]; then
+      echo "service endpoint could not be looked up, try again"   
+      continue 
+    else
+      set -e
+      echo "IP of IPSEC service endpoint is ${serviceip}"
+      trap _term TERM INT
+      _add_route ${serviceip}
+      while true
+      do
+        echo "going to sleep for 1d"
+        sleep 1d
+      done
+    fi
 done
-set +e
-serviceip=`_lookupserviceendpoing ${IPSEC_NAMESPACE} ${service_endpoint}`
-if [ $? -eq 2 ]; then
-  echo "service endpoint could not be looked up, try again"   
-  continue 
-else
-  set -e
-  echo "IP of IPSEC service endpoint is ${serviceip}"
-  trap _term TERM INT
-  _add_route ${serviceip}
-  while true
-  do
-    echo "going to sleep for 1d"
-    sleep 1d
-  done
-fi
 set -e
 echo "service endpoint could finally not be found"
 exit 1
