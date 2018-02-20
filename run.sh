@@ -6,7 +6,7 @@ _lookupserviceendpoing () {
     IP=`curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
           https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/${1}/endpoints/${2} \
           | jq .subsets[0].addresses[0].ip`
-    if [ "$IP" -ne "null" ]
+    if [ "$IP" != "null" ]
     then
         echo $IP
         return 0
