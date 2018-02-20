@@ -11,7 +11,7 @@ _lookupserviceendpoing () {
         echo $IP
         return 0
     else
-        return 1
+        return 2
     fi
 }
 
