@@ -2,7 +2,7 @@
 set -euo pipefail
 
 _lookupserviceendpoing () {
-    KUBE_TOKEN=$(</var/run/secrets/kubernetes.io/serviceaccount/token)
+    KUBE_TOKEN=`cat /var/run/secrets/kubernetes.io/serviceaccount/token`
     IP=`curl -sSk -H "Authorization: Bearer $KUBE_TOKEN" \
           https://$KUBERNETES_SERVICE_HOST:$KUBERNETES_PORT_443_TCP_PORT/api/v1/namespaces/${1}/endpoints/${2} \
           | jq .subsets[0].addresses[0].ip`
